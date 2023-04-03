@@ -4,5 +4,5 @@ public class GameSession
 {
     public string GameSessionId { get; set; }
 
-    public string[] UsedCardIds { get; set; } = Array.Empty<string>();
+    public List<string> UsedCardIds { get; set; } = new List<string>();
 }

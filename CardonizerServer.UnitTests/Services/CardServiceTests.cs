@@ -31,7 +31,7 @@ public class CardServiceTests
     public async Task CanGetNextCardAsync()
     {
         var expected = new CardEntityBase();
-        var expectedUsedCardIds = new[] {"UsedCardId"};
+        var expectedUsedCardIds = new List<string> {"UsedCardId"};
         var cardType = new CardType {GameNameId = GameId};
         IEnumerable<string> actualUsedCardIds = null;
         _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(cardType);
@@ -45,6 +45,7 @@ public class CardServiceTests
 
         actual.Should().Be(expected);
         actualUsedCardIds.Should().BeEquivalentTo(expectedUsedCardIds);
+        _gameSessionManager.Received().Update(Arg.Is<GameSession>(g => g.GameSessionId == GameSessionId));
     }
 
     [Fact]

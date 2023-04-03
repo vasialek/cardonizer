@@ -1,17 +1,19 @@
 using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Newtonsoft.Json;
 
 namespace CardonizerServer.Api.Services;
 
 public class CardService : ICardService
 {
     private readonly ICardProviderFactory _cardProviderFactory;
-    private readonly IGameSessionManager _gameSessionManager;
     private readonly IGameOptionsRepository _gameOptionsRepository;
+    private readonly IGameSessionManager _gameSessionManager;
 
-    public CardService(ICardProviderFactory cardProviderFactory, IGameSessionManager gameSessionManager, IGameOptionsRepository gameOptionsRepository)
+    public CardService(ICardProviderFactory cardProviderFactory,
+        IGameSessionManager gameSessionManager,
+        IGameOptionsRepository gameOptionsRepository)
     {
         _cardProviderFactory = cardProviderFactory;
         _gameSessionManager = gameSessionManager;
@@ -26,6 +28,12 @@ public class CardService : ICardService
         var cardType = await _gameOptionsRepository.GetCardTypeByIdAsync(cardTypeId);
         var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
 
-        return await cardProvider.GetNextCardAsync(cardTypeId, gameSession.UsedCardIds);
+        var card = await cardProvider.GetNextCardAsync(cardTypeId, gameSession.UsedCardIds);
+        Console.WriteLine("Got next card: {0}", card.CardId);
+        gameSession.UsedCardIds.Add(card.CardId);
+        _gameSessionManager.Update(gameSession);
+        Console.WriteLine("Updating game session: {0}", JsonConvert.SerializeObject(gameSession));
+
+        return card;
     }
 }

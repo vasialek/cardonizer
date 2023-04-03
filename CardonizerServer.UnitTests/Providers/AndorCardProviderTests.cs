@@ -24,7 +24,7 @@ public class AndorCardProviderTests
     [Fact]
     public async Task CanGetNextCardAsync()
     {
-        _cardRepository.GetNextCardAsync(CardTypeId).Returns(new[] {_card});
+        _cardRepository.LoadCardsByCardType(CardTypeId).Returns(new[] {_card});
 
         var actual = await _cardProvider.GetNextCardAsync(CardTypeId, Array.Empty<string>());
 
@@ -35,7 +35,7 @@ public class AndorCardProviderTests
     public async Task GetNextCardAsync_SkipUsedCard()
     {
         var expected = new GoldenCard() {CardId = "UnusedCardId"};
-        _cardRepository.GetNextCardAsync(CardTypeId)
+        _cardRepository.LoadCardsByCardType(CardTypeId)
             .Returns(new[] {_card, expected});
 
         var actual = await _cardProvider.GetNextCardAsync(CardTypeId, new[] {"CardId"});

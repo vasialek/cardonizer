@@ -29,8 +29,7 @@ public class GameSessionManagerTests
 
         actual.Should().BeEquivalentTo(new GameSession
         {
-            GameSessionId = GameSessionId,
-            UsedCardIds = Array.Empty<string>()
+            GameSessionId = GameSessionId
         });
     }
 
@@ -44,8 +43,7 @@ public class GameSessionManagerTests
 
         actual.Should().BeEquivalentTo(new GameSession()
         {
-            GameSessionId = GameSessionId,
-            UsedCardIds = Array.Empty<string>()
+            GameSessionId = GameSessionId
         });
     }
 }

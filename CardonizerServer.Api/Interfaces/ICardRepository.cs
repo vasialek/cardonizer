@@ -4,5 +4,5 @@ namespace CardonizerServer.Api.Interfaces;
 
 public interface ICardRepository
 {
-    Task<IEnumerable<CardEntityBase>> GetNextCardAsync(string cardTypeId);
+    Task<IEnumerable<CardEntityBase>> LoadCardsByCardType(string cardTypeId);
 }

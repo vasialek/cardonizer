@@ -25,7 +25,6 @@ builder.Services.AddSingleton<ICardRepository, CardRepository>();
 builder.Services.AddSingleton<IGameOptionsRepository, GameOptionsRepository>();
 builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
 builder.Services.AddScoped<IMythRepository, MythRepository>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
