@@ -11,4 +11,6 @@ public interface IGameSessionManager
     void Update(GameSession gameSession);
 
     Task<IEnumerable<GameSession>> GetAllAsync();
+    
+    void ResetGameSession(string gameSessionId);
 }

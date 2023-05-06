@@ -27,6 +27,8 @@ builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
 builder.Services.AddScoped<IMythRepository, MythRepository>();
 var app = builder.Build();
 
+app.UseDeveloperExceptionPage();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

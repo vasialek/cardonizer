@@ -1,3 +1,4 @@
+using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Managers;
 using CardonizerServer.Api.Models;
@@ -45,5 +46,28 @@ public class GameSessionManagerTests
         {
             GameSessionId = GameSessionId
         });
+    }
+
+    [Fact]
+    public void GetGameSession_Error_WhenSessionNotExists()
+    {
+        _manager.Invoking(m => m.GetGameSession("NonExistingSession"))
+            .Should()
+            .ThrowExactly<InternalFlowException>()
+            .WithMessage("Game session does not exist: NonExistingSession");
+    }
+
+    [Fact]
+    public void CanResetGameSession()
+    {
+        _manager.Create();
+        var gameSession = _manager.GetGameSession(GameSessionId);
+        gameSession.UsedCardIds.Add("UsedCardId");
+        _manager.Update(gameSession);
+
+        _manager.ResetGameSession(GameSessionId);
+        var actual = _manager.GetGameSession(GameSessionId);
+
+        actual.UsedCardIds.Should().BeEmpty();
     }
 }

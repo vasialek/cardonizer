@@ -95,6 +95,24 @@ public class GameOptionsRepository : IGameOptionsRepository
                 CardTypeId = "b2b6d8720c7f489aaf989284387bff41",
                 Name = "Clue investigation card"
             },
+            new ()
+            {
+                GameNameId = RuneboundId,
+                CardTypeId = "7cc5942d38c14c57820226f7014279a1",
+                Name = "Quest card (green)"
+            },
+            new ()
+            {
+                GameNameId = RuneboundId,
+                CardTypeId = "0194c57298e94819948951a48badd0f3",
+                Name = "Fight card (orange)"
+            },
+            new ()
+            {
+                GameNameId = RuneboundId,
+                CardTypeId = "b31d0712777345cbb779f4e6fece492e",
+                Name = "Action card (purple)"
+            }
         };
 
         return cardTypes.ToList();

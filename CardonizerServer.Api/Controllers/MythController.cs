@@ -18,7 +18,7 @@ public class MythController : ControllerBase
         _mythCardMapper = mythCardMapper;
     }
 
-    [HttpGet(Name = "LoadAllCards")]
+    [HttpGet("LoadAllCards")]
     public async Task<IActionResult> LoadMythCardsAsync(string gameId)
     {
         var cards = await _mythRepository.GetAllMythAsync();

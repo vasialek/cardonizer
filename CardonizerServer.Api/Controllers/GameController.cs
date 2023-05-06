@@ -17,7 +17,7 @@ public class GameController : ControllerBase
         _gameSessionManager = gameSessionManager;
     }
 
-    [HttpPost(Name = "StartGame")]
+    [HttpPost("StartGame")]
     public async Task<ActionResult> StartGameAsync(StartGameRequest request)
     {
         var gameSession = _gameSessionManager.Create();
@@ -25,7 +25,14 @@ public class GameController : ControllerBase
         return Ok(new StartGameResponse{GameSession = gameSession});
     }
 
-    [HttpGet(Name = "GetAll")]
+    [HttpPost("ResetGame")]
+    public async Task<IActionResult> ResetGameAsync(ResetGameRequest request)
+    {
+        _gameSessionManager.ResetGameSession(request.GameSessionId);
+        return Ok();
+    }
+
+    [HttpGet("GetAll")]
     public async Task<IReadOnlyCollection<GameSession>> GetGameSessionsListAsync()
     {
         return (await _gameSessionManager.GetAllAsync()).ToList();

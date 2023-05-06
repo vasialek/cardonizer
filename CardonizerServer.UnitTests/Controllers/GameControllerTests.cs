@@ -12,6 +12,7 @@ namespace CardonizerServer.UnitTests.Controllers;
 
 public class GameControllerTests
 {
+    private const string GameSessionId = "GameSessionId";
     private readonly IGameSessionManager _gameSessionManager = Substitute.For<IGameSessionManager>();
 
     private readonly GameController _controller;
@@ -24,7 +25,7 @@ public class GameControllerTests
     [Fact]
     public async Task CanStartGameAsync()
     {
-        var expected = new GameSession{GameSessionId = "GameSessionId"};
+        var expected = new GameSession{GameSessionId = GameSessionId};
         var request = new StartGameRequest();
         _gameSessionManager.Create().Returns(expected);
 
@@ -33,5 +34,17 @@ public class GameControllerTests
         var actual = actualResponse as OkObjectResult;
         actual.Should().NotBeNull();
         actual.Value.Should().BeEquivalentTo(new StartGameResponse{GameSession = expected});
+    }
+
+    [Fact]
+    public async Task CanResetGameAsync()
+    {
+        var request = new ResetGameRequest{GameSessionId = GameSessionId};
+
+        var actualResponse = await _controller.ResetGameAsync(request);
+
+        var actual = actualResponse as OkResult;
+        actual.Should().NotBeNull();
+        _gameSessionManager.Received(1).ResetGameSession(GameSessionId);
     }
 }

@@ -21,7 +21,7 @@ public class GameSessionManager : IGameSessionManager
     {
         var exists = MemoryCache.TryGetValue(gameSessionId, out GameSession gameSession);
 
-        return exists ? gameSession : throw new InternalFlowException("");
+        return exists ? gameSession : throw new InternalFlowException($"Game session does not exist: {gameSessionId}");
     }
 
     public GameSession Create()
@@ -47,5 +47,11 @@ public class GameSessionManager : IGameSessionManager
     {
         return MemoryCacheKeys.Select(k => MemoryCache.Get<GameSession>(k))
             .ToList();
+    }
+
+    public void ResetGameSession(string gameSessionId)
+    {
+        var session = GetGameSession(gameSessionId);
+        session.UsedCardIds.Clear();
     }
 }

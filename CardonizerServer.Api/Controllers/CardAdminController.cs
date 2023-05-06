@@ -15,7 +15,7 @@ public class CardAdminController : ControllerBase
         _mythRepository = mythRepository;
     }
 
-    [HttpPost(Name = "AddMythCard")]
+    [HttpPost("AddMythCard")]
     public async Task<IActionResult> AddMythCardAsync(string title,
         MythCategories mythCategory,
         string task,
