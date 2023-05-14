@@ -21,7 +21,7 @@ public class GameSessionManager : IGameSessionManager
     {
         var exists = MemoryCache.TryGetValue(gameSessionId, out GameSession gameSession);
 
-        return exists ? gameSession : throw new InternalFlowException($"Game session does not exist: {gameSessionId}");
+        return exists ? gameSession : throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Game session does not exist: {gameSessionId}");
     }
 
     public GameSession Create()

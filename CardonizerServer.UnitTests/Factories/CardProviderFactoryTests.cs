@@ -1,5 +1,6 @@
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Factories;
+using CardonizerServer.Api.Models;
 using CardonizerServer.Api.Providers;
 using CardonizerServer.Api.Repositories;
 using FluentAssertions;
@@ -31,6 +32,7 @@ public class CardProviderFactoryTests
         _factory.Invoking(f => f.CreateProvider("SomeNonExistingGameNameId"))
             .Should()
             .ThrowExactly<InternalFlowException>()
-            .WithMessage("Can't create card provider for unknown game `SomeNonExistingGameNameId`.");
+            .WithMessage("Can't create card provider for unknown game `SomeNonExistingGameNameId`.")
+            .Where(e => e.ErrorCode == ErrorCodes.ObjectNotFound);
     }
 }

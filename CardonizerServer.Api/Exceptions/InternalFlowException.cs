@@ -1,9 +1,14 @@
+using CardonizerServer.Api.Models;
+
 namespace CardonizerServer.Api.Exceptions;
 
 public class InternalFlowException : Exception
 {
-    public InternalFlowException(string message)
+    public ErrorCodes ErrorCode { get; }
+
+    public InternalFlowException(ErrorCodes errorCode, string message)
         : base(message)
     {
+        ErrorCode = errorCode;
     }
 }

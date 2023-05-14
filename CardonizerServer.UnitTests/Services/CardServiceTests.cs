@@ -58,6 +58,7 @@ public class CardServiceTests
         await _service.Invoking(s => s.GetNextCardAsync(GameSessionId, CardTypeId))
             .Should()
             .ThrowExactlyAsync<InternalFlowException>()
-            .WithMessage($"Failed to get next card, game session was not found: {GameSessionId}");
+            .WithMessage($"Failed to get next card, game session was not found: {GameSessionId}")
+            .Where(e => e.ErrorCode == ErrorCodes.ObjectNotFound);
     }
 }

@@ -1,5 +1,6 @@
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
+using CardonizerServer.Api.Models;
 using CardonizerServer.Api.Providers;
 using CardonizerServer.Api.Repositories;
 
@@ -19,7 +20,7 @@ public class CardProviderFactory : ICardProviderFactory
         return gameNameId switch
         {
             GameOptionsRepository.AndorId => new AndorCardProvider(_cardRepository),
-            _ => throw new InternalFlowException($"Can't create card provider for unknown game `{gameNameId}`.")
+            _ => throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Can't create card provider for unknown game `{gameNameId}`.")
         };
     }
 }

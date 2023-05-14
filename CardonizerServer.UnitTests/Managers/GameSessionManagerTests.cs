@@ -54,7 +54,8 @@ public class GameSessionManagerTests
         _manager.Invoking(m => m.GetGameSession("NonExistingSession"))
             .Should()
             .ThrowExactly<InternalFlowException>()
-            .WithMessage("Game session does not exist: NonExistingSession");
+            .WithMessage("Game session does not exist: NonExistingSession")
+            .Where(e => e.ErrorCode == ErrorCodes.ObjectNotFound);
     }
 
     [Fact]

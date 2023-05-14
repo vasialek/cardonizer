@@ -1,6 +1,7 @@
 using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
+using CardonizerServer.Api.Models;
 
 namespace CardonizerServer.Api.Repositories;
 
@@ -121,6 +122,6 @@ public class GameOptionsRepository : IGameOptionsRepository
     public async Task<CardType> GetCardTypeByIdAsync(string cardTypeId)
     {
         return GetGameCardTypes().FirstOrDefault(t => t.CardTypeId == cardTypeId) ??
-               throw new InternalFlowException($"Unknown card type `{cardTypeId}`");
+               throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Unknown card type `{cardTypeId}`");
     }
 }
