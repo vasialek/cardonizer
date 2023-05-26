@@ -19,7 +19,7 @@ public class CardProviderFactory : ICardProviderFactory
     {
         return gameNameId switch
         {
-            GameOptionsRepository.AndorId => new AndorCardProvider(_cardRepository),
+            GameNameRepository.AndorId => new AndorCardProvider(_cardRepository),
             _ => throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Can't create card provider for unknown game `{gameNameId}`.")
         };
     }

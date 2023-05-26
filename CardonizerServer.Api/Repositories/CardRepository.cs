@@ -28,6 +28,7 @@ public class CardRepository : ICardRepository
     {
         _cardsList = new List<CardEntityBase>
         {
+            new SilverCard {CardId = _uniqueIdService.GetUniqueId(), Title = "AndorSilver1", Description = "About..."},
             new GoldenCard {CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden1", Description = "About..."},
             new GoldenCard {CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden2", Description = "About..."},
             new GoldenCard {CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden3", Description = "About..."},

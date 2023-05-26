@@ -1,4 +1,5 @@
 using CardonizerServer.Api.Models;
+using CardonizerServer.Api.Models.Requests;
 
 namespace CardonizerServer.Api.Interfaces;
 

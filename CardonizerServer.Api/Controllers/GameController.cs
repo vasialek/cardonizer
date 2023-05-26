@@ -18,7 +18,7 @@ public class GameController : ControllerBase
     }
 
     [HttpPost("StartGame")]
-    public async Task<ActionResult> StartGameAsync(StartGameRequest request)
+    public async Task<ActionResult> StartGameAsync(string gameNameId)
     {
         var gameSession = _gameSessionManager.Create();
 

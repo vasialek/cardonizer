@@ -20,7 +20,7 @@ public class CardProviderFactoryTests
     [Fact]
     public void CanCreateProvider()
     {
-        var actual = _factory.CreateProvider(GameOptionsRepository.AndorId);
+        var actual = _factory.CreateProvider(GameNameRepository.AndorId);
 
         actual.Should().NotBeNull();
         actual.Should().BeOfType<AndorCardProvider>();

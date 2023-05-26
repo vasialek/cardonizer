@@ -13,6 +13,7 @@ namespace CardonizerServer.UnitTests.Controllers;
 public class GameControllerTests
 {
     private const string GameSessionId = "GameSessionId";
+    private const string GameNameId = "GameNameId";
     private readonly IGameSessionManager _gameSessionManager = Substitute.For<IGameSessionManager>();
 
     private readonly GameController _controller;
@@ -26,10 +27,9 @@ public class GameControllerTests
     public async Task CanStartGameAsync()
     {
         var expected = new GameSession{GameSessionId = GameSessionId};
-        var request = new StartGameRequest();
         _gameSessionManager.Create().Returns(expected);
 
-        var actualResponse = await _controller.StartGameAsync(request);
+        var actualResponse = await _controller.StartGameAsync(GameNameId);
 
         var actual = actualResponse as OkObjectResult;
         actual.Should().NotBeNull();

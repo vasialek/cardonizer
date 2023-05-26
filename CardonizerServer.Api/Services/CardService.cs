@@ -30,10 +30,8 @@ public class CardService : ICardService
         var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
 
         var card = await cardProvider.GetNextCardAsync(cardTypeId, gameSession.UsedCardIds);
-        Console.WriteLine("Got next card: {0}", card.CardId);
         gameSession.UsedCardIds.Add(card.CardId);
         _gameSessionManager.Update(gameSession);
-        Console.WriteLine("Updating game session: {0}", JsonConvert.SerializeObject(gameSession));
 
         return card;
     }
