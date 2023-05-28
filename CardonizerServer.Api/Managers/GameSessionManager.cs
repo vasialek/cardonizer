@@ -1,3 +1,4 @@
+using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
@@ -28,8 +29,7 @@ public class GameSessionManager : IGameSessionManager
     {
         var gameSession = new GameSession
         {
-            GameSessionId = _uniqueIdService.GetUniqueId(),
-            UsedCardIds = new List<string>()
+            GameSessionId = _uniqueIdService.GetUniqueId()
         };
 
         MemoryCache.Set(gameSession.GameSessionId, gameSession, new MemoryCacheEntryOptions {Size = 1});
@@ -52,6 +52,7 @@ public class GameSessionManager : IGameSessionManager
     public void ResetGameSession(string gameSessionId)
     {
         var session = GetGameSession(gameSessionId);
-        session.UsedCardIds.Clear();
+        session.CurrentCardIndex = 0;
+        session.AvailableCards = Array.Empty<CardEntityBase>();
     }
 }

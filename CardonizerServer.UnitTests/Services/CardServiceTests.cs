@@ -21,6 +21,8 @@ public class CardServiceTests
     private readonly IGameSessionManager _gameSessionManager = Substitute.For<IGameSessionManager>();
 
     private readonly CardService _service;
+    private readonly CardEntityBase _card1 = new() {CardId = "Card2"};
+    private readonly CardEntityBase _card2 = new() {CardId = "Card1"};
 
     public CardServiceTests()
     {
@@ -30,29 +32,32 @@ public class CardServiceTests
     [Fact]
     public async Task CanGetNextCardAsync()
     {
-        var expected = new CardEntityBase();
-        var expectedUsedCardIds = new List<string> {"UsedCardId"};
-        var cardType = new CardType {GameNameId = GameId};
-        IEnumerable<string> actualUsedCardIds = null;
-        _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(cardType);
+        var expectedAvailableCards = new[] { _card2, _card1 };
         _gameSessionManager.GetGameSession(GameSessionId)
-            .Returns(new GameSession {GameSessionId = GameSessionId, UsedCardIds = expectedUsedCardIds});
-        _cardProviderFactory.CreateProvider(GameId).Returns(_cardProvider);
-        _cardProvider.GetNextCardAsync(CardTypeId, Arg.Do<IEnumerable<string>>(l => actualUsedCardIds = l))
-            .Returns(expected);
+            .Returns(new GameSession {GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCards = expectedAvailableCards});
 
         var actual = await _service.GetNextCardAsync(GameSessionId, CardTypeId);
 
-        actual.Should().Be(expected);
-        actualUsedCardIds.Should().BeEquivalentTo(expectedUsedCardIds);
-        _gameSessionManager.Received().Update(Arg.Is<GameSession>(g => g.GameSessionId == GameSessionId));
+        actual.Should().Be(_card1);
+        _gameSessionManager.Received().Update(Arg.Is<GameSession>(g => g.GameSessionId == GameSessionId && g.CurrentCardIndex == 2));
+    }
+
+    [Fact]
+    public async Task GetNextCardAsync_LoadCards_WhenNotLoaded()
+    {
+        _gameSessionManager.GetGameSession(GameSessionId).Returns(new GameSession {GameSessionId = GameSessionId});
+        _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(new CardType { GameNameId = GameId });
+        _cardProviderFactory.CreateProvider(GameId).Returns(_cardProvider);
+        _cardProvider.GetCardsAsync(CardTypeId).Returns(new[] { _card1, _card2 });
+
+        var actual = await _service.GetNextCardAsync(GameSessionId, CardTypeId);
+
+        actual.Should().Be(_card1);
     }
 
     [Fact]
     public async Task GetNextCardAsync_Error_WhenIncorrectGameSessionId()
     {
-        var expected = new CardEntityBase();
-        var cardType = new CardType {GameNameId = GameId};
         _gameSessionManager.GetGameSession(GameSessionId).ReturnsNull();
 
         await _service.Invoking(s => s.GetNextCardAsync(GameSessionId, CardTypeId))
@@ -60,5 +65,17 @@ public class CardServiceTests
             .ThrowExactlyAsync<InternalFlowException>()
             .WithMessage($"Failed to get next card, game session was not found: {GameSessionId}")
             .Where(e => e.ErrorCode == ErrorCodes.ObjectNotFound);
+    }
+
+    [Fact]
+    public async Task GetNextCardAsync_Error_WhenNoNextCard()
+    {
+        _gameSessionManager.GetGameSession(GameSessionId)
+            .Returns(new GameSession { GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCards = new[] { _card1 } });
+
+        await _service.Invoking(s => s.GetNextCardAsync(GameSessionId, CardTypeId))
+            .Should()
+            .ThrowExactlyAsync<InternalFlowException>()
+            .Where(e => e.ErrorCode == ErrorCodes.NoNextCard);
     }
 }

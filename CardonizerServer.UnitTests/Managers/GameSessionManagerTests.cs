@@ -1,3 +1,4 @@
+using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Managers;
@@ -30,7 +31,9 @@ public class GameSessionManagerTests
 
         actual.Should().BeEquivalentTo(new GameSession
         {
-            GameSessionId = GameSessionId
+            GameSessionId = GameSessionId,
+            CurrentCardIndex = 0,
+            AvailableCards = null
         });
     }
 
@@ -63,12 +66,19 @@ public class GameSessionManagerTests
     {
         _manager.Create();
         var gameSession = _manager.GetGameSession(GameSessionId);
-        gameSession.UsedCardIds.Add("UsedCardId");
+        gameSession.AvailableCards = new[] { new CardEntityBase() };
+        gameSession.CurrentCardIndex = 111;
         _manager.Update(gameSession);
 
         _manager.ResetGameSession(GameSessionId);
         var actual = _manager.GetGameSession(GameSessionId);
 
-        actual.UsedCardIds.Should().BeEmpty();
+        actual.IsLoaded.Should().BeFalse();
+        actual.Should().BeEquivalentTo(new GameSession
+        {
+            GameSessionId = GameSessionId,
+            CurrentCardIndex = 0,
+            AvailableCards = Array.Empty<CardEntityBase>()
+        });
     }
 }

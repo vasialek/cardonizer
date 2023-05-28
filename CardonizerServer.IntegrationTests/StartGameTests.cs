@@ -32,10 +32,10 @@ public class StartGameTests
             .Where(t => t.GameNameId == GameNameRepository.AndorId)
             .ToList();
 
-        for (var i = 0; i < 10; i++)
+        do
         {
             var card = await cardService.GetNextCardAsync(gameSession.GameSessionId, andorCardTypes[0].CardTypeId);
             _outputHelper.WriteLine("{0} \\ {1}\n{2}", card.Title, andorCardTypes[0].Name, card.Description);
-        }
+        } while (true);
     }
 }

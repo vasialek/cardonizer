@@ -2,7 +2,6 @@ using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
-using Newtonsoft.Json;
 
 namespace CardonizerServer.Api.Services;
 
@@ -26,13 +25,22 @@ public class CardService : ICardService
         var gameSession = _gameSessionManager.GetGameSession(gameSessionId) ??
                           throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Failed to get next card, game session was not found: {gameSessionId}");
 
-        var cardType = await _gameOptionsRepository.GetCardTypeByIdAsync(cardTypeId);
-        var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
+        if (gameSession.IsLoaded == false)
+        {
+            var cardType = await _gameOptionsRepository.GetCardTypeByIdAsync(cardTypeId);
+            var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
+            var availableCards = await cardProvider.GetCardsAsync(cardTypeId);
+            gameSession.AvailableCards = availableCards.ToArray();
+            gameSession.CurrentCardIndex = 0;
+        }
 
-        var card = await cardProvider.GetNextCardAsync(cardTypeId, gameSession.UsedCardIds);
-        gameSession.UsedCardIds.Add(card.CardId);
+        if (gameSession.AvailableCards.Length <= gameSession.CurrentCardIndex)
+        {
+            throw new InternalFlowException(ErrorCodes.NoNextCard, "");
+        }
+
+        var card = gameSession.AvailableCards[gameSession.CurrentCardIndex++];
         _gameSessionManager.Update(gameSession);
-
         return card;
     }
 }
