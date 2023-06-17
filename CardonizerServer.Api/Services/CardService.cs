@@ -10,13 +10,16 @@ public class CardService : ICardService
     private readonly ICardProviderFactory _cardProviderFactory;
     private readonly IGameOptionsRepository _gameOptionsRepository;
     private readonly IGameSessionManager _gameSessionManager;
+    private readonly ICardRandomizerService _cardRandomizerService;
 
     public CardService(ICardProviderFactory cardProviderFactory,
         IGameSessionManager gameSessionManager,
+        ICardRandomizerService cardRandomizerService,
         IGameOptionsRepository gameOptionsRepository)
     {
         _cardProviderFactory = cardProviderFactory;
         _gameSessionManager = gameSessionManager;
+        _cardRandomizerService = cardRandomizerService;
         _gameOptionsRepository = gameOptionsRepository;
     }
 
@@ -30,7 +33,7 @@ public class CardService : ICardService
             var cardType = await _gameOptionsRepository.GetCardTypeByIdAsync(cardTypeId);
             var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
             var availableCards = await cardProvider.GetCardsAsync(cardTypeId);
-            gameSession.AvailableCards = availableCards.ToArray();
+            gameSession.AvailableCards = _cardRandomizerService.RandomizeOrder(availableCards).ToArray();
             gameSession.CurrentCardIndex = 0;
         }
 

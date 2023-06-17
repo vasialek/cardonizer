@@ -1,9 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CardonizerServer.Api.Factories;
+using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Managers;
+using CardonizerServer.Api.Models.Cards.AndorCards;
 using CardonizerServer.Api.Repositories;
 using CardonizerServer.Api.Services;
+using FluentAssertions;
+using NSubstitute;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,6 +16,7 @@ namespace CardonizerServer.IntegrationTests;
 public class StartGameTests
 {
     private readonly ITestOutputHelper _outputHelper;
+    private readonly IRandomProvider _randomProvider = Substitute.For<IRandomProvider>();
 
     public StartGameTests(ITestOutputHelper outputHelper)
     {
@@ -23,19 +28,37 @@ public class StartGameTests
     {
         var uniqueIdService = new UniqueIdService();
         var gameSessionManager = new GameSessionManager(uniqueIdService);
-        var cardRepository = new CardRepository(uniqueIdService);
+        // var cardRepository = new CardRepository(uniqueIdService);
+        var cardRepository = Substitute.For<ICardRepository>();
         var gameOptionsRepository = new GameOptionsRepository();
-        var cardService = new CardService(new CardProviderFactory(cardRepository), gameSessionManager, gameOptionsRepository);
+        var cardProviderFactory = new CardProviderFactory(cardRepository);
+        var cardRandomizerService = new CardRandomizerService(_randomProvider);
+        var cardService = new CardService(cardProviderFactory, gameSessionManager, cardRandomizerService, gameOptionsRepository);
 
         var gameSession = gameSessionManager.Create();
         var andorCardTypes = gameOptionsRepository.GetGameCardTypes()
             .Where(t => t.GameNameId == GameNameRepository.AndorId)
             .ToList();
 
-        do
-        {
-            var card = await cardService.GetNextCardAsync(gameSession.GameSessionId, andorCardTypes[0].CardTypeId);
-            _outputHelper.WriteLine("{0} \\ {1}\n{2}", card.Title, andorCardTypes[0].Name, card.Description);
-        } while (true);
+        _randomProvider.Next(Arg.Any<int>()).Returns(30, 10, 20);
+        cardRepository.LoadCardsByCardType(GoldenCard.CardType)
+            .Returns(new[]
+            {
+                new GoldenCard { CardId = "Card01", Title = "First", Description = "Description 1" },
+                new GoldenCard { CardId = "Card02", Title = "Second", Description = "Description 2" },
+                new GoldenCard { CardId = "Card03", Title = "Third", Description = "Description 3" }
+            });
+        
+        var card = await cardService.GetNextCardAsync(gameSession.GameSessionId, GoldenCard.CardType);
+        _outputHelper.WriteLine("{0} \\ {1}\n{2}", card.Title, card.GetType().Name, card.Description);
+        card.CardId.Should().Be("Card02");
+        
+        card = await cardService.GetNextCardAsync(gameSession.GameSessionId, GoldenCard.CardType);
+        _outputHelper.WriteLine("{0} \\ {1}\n{2}", card.Title, card.GetType().Name, card.Description);
+        card.CardId.Should().Be("Card03");
+
+        card = await cardService.GetNextCardAsync(gameSession.GameSessionId, GoldenCard.CardType);
+        _outputHelper.WriteLine("{0} \\ {1}\n{2}", card.Title, card.GetType().Name, card.Description);
+        card.CardId.Should().Be("Card01");
     }
 }

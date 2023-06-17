@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="NSubstitute" Version="5.0.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +23,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CardonizerServer.Api\CardonizerServer.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="FluentAssertions">
+        <HintPath>..\..\..\.nuget\packages\fluentassertions\6.10.0\lib\net6.0\FluentAssertions.dll</HintPath>
+      </Reference>
+      <Reference Include="NSubstitute">
+        <HintPath>..\..\..\.nuget\packages\nsubstitute\5.0.0\lib\net6.0\NSubstitute.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

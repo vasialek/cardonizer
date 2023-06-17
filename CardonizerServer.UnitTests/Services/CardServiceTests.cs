@@ -15,8 +15,10 @@ public class CardServiceTests
     private const string GameId = "GameId1";
     private const string CardTypeId = "CardType1";
     private const string GameSessionId = "GameSessionId";
+    
     private readonly ICardProvider _cardProvider = Substitute.For<ICardProvider>();
     private readonly ICardProviderFactory _cardProviderFactory = Substitute.For<ICardProviderFactory>();
+    private readonly ICardRandomizerService _cardRandomizerService = Substitute.For<ICardRandomizerService>();
     private readonly IGameOptionsRepository _gameOptionsRepository = Substitute.For<IGameOptionsRepository>();
     private readonly IGameSessionManager _gameSessionManager = Substitute.For<IGameSessionManager>();
 
@@ -26,7 +28,7 @@ public class CardServiceTests
 
     public CardServiceTests()
     {
-        _service = new CardService(_cardProviderFactory, _gameSessionManager, _gameOptionsRepository);
+        _service = new CardService(_cardProviderFactory, _gameSessionManager, _cardRandomizerService, _gameOptionsRepository);
     }
 
     [Fact]
@@ -48,7 +50,9 @@ public class CardServiceTests
         _gameSessionManager.GetGameSession(GameSessionId).Returns(new GameSession {GameSessionId = GameSessionId});
         _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(new CardType { GameNameId = GameId });
         _cardProviderFactory.CreateProvider(GameId).Returns(_cardProvider);
-        _cardProvider.GetCardsAsync(CardTypeId).Returns(new[] { _card1, _card2 });
+        var cards = new[] { _card2, _card1 };
+        _cardProvider.GetCardsAsync(CardTypeId).Returns(cards);
+        _cardRandomizerService.RandomizeOrder(cards).Returns(new[] { _card1, _card2 });
 
         var actual = await _service.GetNextCardAsync(GameSessionId, CardTypeId);
 
