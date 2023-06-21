@@ -2,6 +2,8 @@ using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Exceptions;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
+using CardonizerServer.Api.Models.Cards.AndorCards;
+using CardonizerServer.Api.Models.Cards.EldritchHorrorCards;
 
 namespace CardonizerServer.Api.Repositories;
 
@@ -24,7 +26,7 @@ public class GameOptionsRepository : IGameOptionsRepository
             new ()
             {
                 GameNameId = GameNameRepository.AndorId,
-                CardTypeId = "efcb46987cca4f8cb3bd753c610eee53",
+                CardTypeId = GoldenCard.CardType,
                 Name = "Golden card"
             },
             new ()
@@ -36,7 +38,7 @@ public class GameOptionsRepository : IGameOptionsRepository
             new ()
             {
                 GameNameId = GameNameRepository.EldritchHorrorId,
-                CardTypeId = "31b312161edf4f44ae12ba5637edaa83",
+                CardTypeId = MythCard.CardType,
                 Name = "Mythos card"
             },
             new ()

@@ -12,12 +12,12 @@ public class AndorCardProvider : ICardProvider
         _cardRepository = cardRepository;
     }
 
-    public async Task<CardEntityBase> GetNextCardAsync(string cardTypeId, IEnumerable<string> usedCardIds)
-    {
-        var cards = await _cardRepository.LoadCardsByCardType(cardTypeId);
-
-        return cards.First(c => usedCardIds.Contains(c.CardId) == false);
-    }
+    // public async Task<CardEntityBase> GetNextCardAsync(string cardTypeId, IEnumerable<string> usedCardIds)
+    // {
+    //     var cards = await _cardRepository.LoadCardsByCardType(cardTypeId);
+    //
+    //     return cards.First(c => usedCardIds.Contains(c.CardId) == false);
+    // }
 
     public async Task<IEnumerable<CardEntityBase>> GetCardsAsync(string cardTypeId)
     {

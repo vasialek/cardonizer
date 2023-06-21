@@ -39,7 +39,7 @@ public class CardService : ICardService
 
         if (gameSession.AvailableCards.Length <= gameSession.CurrentCardIndex)
         {
-            throw new InternalFlowException(ErrorCodes.NoNextCard, "");
+            throw new InternalFlowException(ErrorCodes.NoNextCard, $"No next card available for card type {cardTypeId}.");
         }
 
         var card = gameSession.AvailableCards[gameSession.CurrentCardIndex++];
