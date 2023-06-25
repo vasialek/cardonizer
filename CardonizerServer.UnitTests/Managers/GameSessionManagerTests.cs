@@ -12,43 +12,51 @@ namespace CardonizerServer.UnitTests.Managers;
 public class GameSessionManagerTests
 {
     private const string GameSessionId = "GameSessionId";
+    private const string GameNameId = "GameId";
 
+    private readonly IGameService _gameService = Substitute.For<IGameService>();
     private readonly IUniqueIdService _uniqueIdService = Substitute.For<IUniqueIdService>();
 
+    private readonly CardType _cardType = new() { CardTypeId = "CardTypeId" };
+
     private readonly GameSessionManager _manager;
+    private readonly GameSession _gameSession;
 
     public GameSessionManagerTests()
     {
+        var expectedCardTypes = new [] { _cardType };
+        _gameService.GetGameAsync(GameNameId).Returns(new GameDto { Title = "Game", AvailableCardTypes = expectedCardTypes });
         _uniqueIdService.GetUniqueId().Returns(GameSessionId);
 
-        _manager = new GameSessionManager(_uniqueIdService);
-    }
-
-    [Fact]
-    public void CanCreate()
-    {
-        var actual = _manager.Create();
-
-        actual.Should().BeEquivalentTo(new GameSession
+        _gameSession = new GameSession
         {
             GameSessionId = GameSessionId,
             CurrentCardIndex = 0,
+            AvailableCardTypes = new[] { _cardType },
             AvailableCards = null
-        });
+        };
+        
+        _manager = new GameSessionManager(_gameService, _uniqueIdService);
+    }
+
+    [Fact]
+    public async Task CanCreate()
+    {
+        
+        var actual = await _manager.CreateAsync(GameNameId);
+
+        actual.Should().BeEquivalentTo(_gameSession);
     }
 
 
     [Fact]
-    public void CanGetGameSession()
+    public async Task CanGetGameSession()
     {
-        _manager.Create();
+        await _manager.CreateAsync(GameNameId);
 
         var actual = _manager.GetGameSession(GameSessionId);
 
-        actual.Should().BeEquivalentTo(new GameSession()
-        {
-            GameSessionId = GameSessionId
-        });
+        actual.Should().BeEquivalentTo(_gameSession);
     }
 
     [Fact]
@@ -62,10 +70,12 @@ public class GameSessionManagerTests
     }
 
     [Fact]
-    public void CanResetGameSession()
+    public async Task CanResetGameSession()
     {
-        _manager.Create();
+        await _manager.CreateAsync(GameNameId);
         var gameSession = _manager.GetGameSession(GameSessionId);
+        var expectedCardTypes = new[] { _cardType };
+        gameSession.AvailableCardTypes = expectedCardTypes;
         gameSession.AvailableCards = new[] { new CardEntityBase() };
         gameSession.CurrentCardIndex = 111;
         _manager.Update(gameSession);
@@ -78,6 +88,7 @@ public class GameSessionManagerTests
         {
             GameSessionId = GameSessionId,
             CurrentCardIndex = 0,
+            AvailableCardTypes = expectedCardTypes,
             AvailableCards = Array.Empty<CardEntityBase>()
         });
     }

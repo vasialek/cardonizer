@@ -3,6 +3,7 @@ using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Managers;
 using CardonizerServer.Api.Mappers;
 using CardonizerServer.Api.Parsers;
+using CardonizerServer.Api.Providers;
 using CardonizerServer.Api.Repositories;
 using CardonizerServer.Api.Services;
 
@@ -20,10 +21,12 @@ builder.Services.AddSingleton<IMythActionsParser, MythActionsParser>();
 builder.Services.AddSingleton<IUniqueIdService, UniqueIdService>();
 builder.Services.AddSingleton<IJsonService, JsonService>();
 builder.Services.AddSingleton<ICardService, CardService>();
+builder.Services.AddSingleton<ICardRandomizerService, CardRandomizerService>();
+builder.Services.AddSingleton<IRandomProvider, RandomProvider>();
 builder.Services.AddSingleton<ICardProviderFactory, CardProviderFactory>();
+builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
 builder.Services.AddSingleton<ICardRepository, CardRepository>();
 builder.Services.AddSingleton<IGameOptionsRepository, GameOptionsRepository>();
-builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
 builder.Services.AddScoped<IMythRepository, MythRepository>();
 var app = builder.Build();
 

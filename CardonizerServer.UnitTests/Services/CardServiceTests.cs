@@ -15,7 +15,8 @@ public class CardServiceTests
     private const string GameId = "GameId1";
     private const string CardTypeId = "CardType1";
     private const string GameSessionId = "GameSessionId";
-    
+    private const string IncorrectCardTypeId = "IncorrectCardType";
+
     private readonly ICardProvider _cardProvider = Substitute.For<ICardProvider>();
     private readonly ICardProviderFactory _cardProviderFactory = Substitute.For<ICardProviderFactory>();
     private readonly ICardRandomizerService _cardRandomizerService = Substitute.For<ICardRandomizerService>();
@@ -25,6 +26,7 @@ public class CardServiceTests
     private readonly CardService _service;
     private readonly CardEntityBase _card1 = new() {CardId = "Card2"};
     private readonly CardEntityBase _card2 = new() {CardId = "Card1"};
+    private readonly CardType _cardType = new() { CardTypeId = CardTypeId};
 
     public CardServiceTests()
     {
@@ -36,7 +38,7 @@ public class CardServiceTests
     {
         var expectedAvailableCards = new[] { _card2, _card1 };
         _gameSessionManager.GetGameSession(GameSessionId)
-            .Returns(new GameSession {GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCards = expectedAvailableCards});
+            .Returns(new GameSession {GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCardTypes = new [] { _cardType }, AvailableCards = expectedAvailableCards});
 
         var actual = await _service.GetNextCardAsync(GameSessionId, CardTypeId);
 
@@ -47,7 +49,7 @@ public class CardServiceTests
     [Fact]
     public async Task GetNextCardAsync_LoadCards_WhenNotLoaded()
     {
-        _gameSessionManager.GetGameSession(GameSessionId).Returns(new GameSession {GameSessionId = GameSessionId});
+        _gameSessionManager.GetGameSession(GameSessionId).Returns(new GameSession {GameSessionId = GameSessionId, AvailableCardTypes = new [] { _cardType }});
         _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(new CardType { GameNameId = GameId });
         _cardProviderFactory.CreateProvider(GameId).Returns(_cardProvider);
         var cards = new[] { _card2, _card1 };
@@ -58,6 +60,20 @@ public class CardServiceTests
 
         actual.Should().Be(_card1);
     }
+
+    [Fact]
+    public async Task GetNextCardAsync_Error_WhenIncorrectCardType()
+    {
+        _gameSessionManager.GetGameSession(GameSessionId).Returns(new GameSession {GameNameId = GameId, GameSessionId = GameSessionId, AvailableCardTypes = Array.Empty<CardType>()});
+        _gameOptionsRepository.GetCardTypeByIdAsync(IncorrectCardTypeId).Returns(new CardType { CardTypeId = IncorrectCardTypeId });
+        
+        await _service.Invoking(s => s.GetNextCardAsync(GameSessionId, IncorrectCardTypeId))
+            .Should()
+            .ThrowExactlyAsync<InternalFlowException>()
+            .Where(e => e.ErrorCode == ErrorCodes.ObjectNotFound)
+            .Where(e => e.Message == $"Card type {IncorrectCardTypeId} is not available for Game {GameId}");
+    }
+
 
     [Fact]
     public async Task GetNextCardAsync_Error_WhenIncorrectGameSessionId()
@@ -75,7 +91,7 @@ public class CardServiceTests
     public async Task GetNextCardAsync_Error_WhenNoNextCard()
     {
         _gameSessionManager.GetGameSession(GameSessionId)
-            .Returns(new GameSession { GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCards = new[] { _card1 } });
+            .Returns(new GameSession { GameSessionId = GameSessionId, CurrentCardIndex = 1, AvailableCardTypes = new []{ _cardType }, AvailableCards = new[] { _card1 } });
 
         await _service.Invoking(s => s.GetNextCardAsync(GameSessionId, CardTypeId))
             .Should()

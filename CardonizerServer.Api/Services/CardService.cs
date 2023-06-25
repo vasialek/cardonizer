@@ -37,6 +37,11 @@ public class CardService : ICardService
             gameSession.CurrentCardIndex = 0;
         }
 
+        if (gameSession.AvailableCardTypes.Any(t => t.CardTypeId == cardTypeId) == false)
+        {
+            throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Card type {cardTypeId} is not available for Game {gameSession.GameNameId}");
+        }
+
         if (gameSession.AvailableCards.Length <= gameSession.CurrentCardIndex)
         {
             throw new InternalFlowException(ErrorCodes.NoNextCard, $"No next card available for card type {cardTypeId}.");

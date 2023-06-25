@@ -31,13 +31,14 @@ public class EldritchHorrorTests
     public async Task CanStartEldritchHorror()
     {
         var uniqueIdService = new UniqueIdService();
-        var gameSessionManager = new GameSessionManager(uniqueIdService);
         var cardRepository = Substitute.For<ICardRepository>();
         var gameOptionsRepository = new GameOptionsRepository();
         var cardProviderFactory = new CardProviderFactory(cardRepository);
         var cardRandomizerService = new CardRandomizerService(_randomProvider);
+        var gameService = new GameService(gameOptionsRepository);
+        var gameSessionManager = new GameSessionManager(gameService, uniqueIdService);
         var cardService = new CardService(cardProviderFactory, gameSessionManager, cardRandomizerService, gameOptionsRepository);
-        var gameSession = gameSessionManager.Create();
+        var gameSession = await gameSessionManager.CreateAsync(GameNameRepository.EldritchHorrorId);
         _randomProvider.Next(Arg.Any<int>()).Returns(30, 10, 20, 5);
         cardRepository.LoadCardsByCardType(MythCard.CardType)
             .Returns(new[]

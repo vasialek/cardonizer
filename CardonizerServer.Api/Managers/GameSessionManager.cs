@@ -11,10 +11,12 @@ public class GameSessionManager : IGameSessionManager
     private static readonly MemoryCache MemoryCache = new(new MemoryCacheOptions {SizeLimit = 64});
     private static readonly IList<string> MemoryCacheKeys = new List<string>();
 
+    private readonly IGameService _gameService;
     private readonly IUniqueIdService _uniqueIdService;
 
-    public GameSessionManager(IUniqueIdService uniqueIdService)
+    public GameSessionManager(IGameService gameService, IUniqueIdService uniqueIdService)
     {
+        _gameService = gameService;
         _uniqueIdService = uniqueIdService;
     }
 
@@ -25,10 +27,13 @@ public class GameSessionManager : IGameSessionManager
         return exists ? gameSession : throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Game session does not exist: {gameSessionId}");
     }
 
-    public GameSession Create()
+    public async Task<GameSession> CreateAsync(string gameId)
     {
+        var game = await _gameService.GetGameAsync(gameId);
         var gameSession = new GameSession
         {
+            GameNameId = game.GameNameId,
+            AvailableCardTypes = game.AvailableCardTypes,
             GameSessionId = _uniqueIdService.GetUniqueId()
         };
 

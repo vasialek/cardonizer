@@ -9,6 +9,12 @@ namespace CardonizerServer.Api.Repositories;
 
 public class GameOptionsRepository : IGameOptionsRepository
 {
+    public GameNameEntity GetGameByGameId(string gameId)
+    {
+        return LoadAvailableGames().FirstOrDefault(g => g.GameNameId == gameId) ??
+               throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Failed to get game by ID: {gameId}");
+    }
+
     public IEnumerable<GameNameEntity> LoadAvailableGames()
     {
         return new[]

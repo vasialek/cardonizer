@@ -7,7 +7,7 @@ public interface IGameSessionManager
 {
     GameSession GetGameSession(string gameSessionId);
 
-    GameSession Create();
+    Task<GameSession> CreateAsync(string gameId);
 
     void Update(GameSession gameSession);
 

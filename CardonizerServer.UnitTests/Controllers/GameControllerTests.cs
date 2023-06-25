@@ -27,7 +27,7 @@ public class GameControllerTests
     public async Task CanStartGameAsync()
     {
         var expected = new GameSession{GameSessionId = GameSessionId};
-        _gameSessionManager.Create().Returns(expected);
+        _gameSessionManager.CreateAsync(GameNameId).Returns(expected);
 
         var actualResponse = await _controller.StartGameAsync(GameNameId);
 
