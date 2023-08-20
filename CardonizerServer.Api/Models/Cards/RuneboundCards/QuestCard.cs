@@ -9,4 +9,9 @@ public class QuestCard : CardEntityBase
     public string QuestTask { get; set; }
     
     public QuestCardReward[] PossibleRewards { get; set; }
+
+    public QuestCard()
+    {
+        CardTypeId = CardType;
+    }
 }

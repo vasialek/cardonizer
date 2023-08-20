@@ -3,6 +3,7 @@ using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
 using CardonizerServer.Api.Models.Cards.AndorCards;
 using CardonizerServer.Api.Models.Cards.EldritchHorrorCards;
+using CardonizerServer.Api.Models.Cards.RuneboundCards;
 using Newtonsoft.Json;
 
 namespace CardonizerServer.Api.Repositories;
@@ -50,6 +51,35 @@ public class CardRepository : ICardRepository
                 CardId = _uniqueIdService.GetUniqueId(), Title = "Отравленные припасы",
                 Description = "Ваша еду отравлена",
                 Effect = "Каждый сыщик теряет 3 здоровья если он не возьмет состояние Отравление"
+            },
+            new QuestCard
+            {
+                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте долину...", Title = "Погребенное зло", Description = "",
+                PossibleRewards = new []
+                {
+                    new QuestCardReward("Разграбьте и получите 1 золото за каждый символ холма", RuneboundDices.Hill),
+                    new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
+                } 
+            },
+            new QuestCard
+            {
+                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Пройдите проверку силы в Низинах горечи", Title = "Охота на зверя", 
+                Description = "В Низинах горечи видели редчайшего зверя невероятно ценещегося среди охотников.",
+                PossibleRewards = new []
+                {
+                    new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
+                } 
+            },
+            new QuestCard
+            {
+                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте", Title = "Просьба графа", 
+                Description = "Граф замка Сандергард попросил...",
+                PossibleRewards = new []
+                {
+                    new QuestCardReward("Займитесь мелкими ппоручиниям. Получите 1 золотой", RuneboundDices.Lane),
+                    new QuestCardReward("Выполните задание графа. Возьмите одну карту квеста.", RuneboundDices.Lane, RuneboundDices.Lane),
+                    new QuestCardReward("Отбейте атаку... Получите 2 раны и 3 золотых.", RuneboundDices.Everything),
+                } 
             },
             // new MythCard
             // {

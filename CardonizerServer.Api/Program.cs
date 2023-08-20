@@ -31,6 +31,7 @@ builder.Services.AddSingleton<ICardProviderFactory, CardProviderFactory>();
 builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
 builder.Services.AddSingleton<ICardRepository, CardRepository>();
 builder.Services.AddSingleton<IGameOptionsRepository, GameOptionsRepository>();
+builder.Services.AddSingleton<ICardValidationServiceFactory, CardValidationServiceFactory>();
 builder.Services.AddScoped<IMythRepository, MythRepository>();
 var app = builder.Build();
 

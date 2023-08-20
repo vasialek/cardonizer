@@ -4,6 +4,7 @@ using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
 using CardonizerServer.Api.Models.Cards.AndorCards;
 using CardonizerServer.Api.Models.Cards.EldritchHorrorCards;
+using CardonizerServer.Api.Models.Cards.RuneboundCards;
 
 namespace CardonizerServer.Api.Repositories;
 
@@ -104,7 +105,7 @@ public class GameOptionsRepository : IGameOptionsRepository
             new ()
             {
                 GameNameId = GameNameRepository.RuneboundId,
-                CardTypeId = "7cc5942d38c14c57820226f7014279a1",
+                 CardTypeId = QuestCard.CardType,
                 Name = "Quest card (green)"
             },
             new ()
