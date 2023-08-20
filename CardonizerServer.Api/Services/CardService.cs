@@ -32,7 +32,7 @@ public class CardService : ICardService
         {
             var cardType = await _gameOptionsRepository.GetCardTypeByIdAsync(cardTypeId);
             var cardProvider = _cardProviderFactory.CreateProvider(cardType.GameNameId);
-            var availableCards = await cardProvider.GetCardsAsync(cardTypeId);
+            var availableCards = await cardProvider.LoadCardsAsync(cardTypeId);
             gameSession.AvailableCards = _cardRandomizerService.RandomizeOrder(availableCards).ToArray();
             gameSession.CurrentCardIndex = 0;
         }

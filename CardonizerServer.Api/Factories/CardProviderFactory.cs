@@ -21,6 +21,7 @@ public class CardProviderFactory : ICardProviderFactory
         {
             GameNameRepository.AndorId => new AndorCardProvider(_cardRepository),
             GameNameRepository.EldritchHorrorId => new EldritchHorrorCardProvider(_cardRepository),
+            GameNameRepository.RuneboundId => new RuneboundCardProvider(_cardRepository),
             _ => throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Can't create card provider for unknown game `{gameNameId}`.")
         };
     }

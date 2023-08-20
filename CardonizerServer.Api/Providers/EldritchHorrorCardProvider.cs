@@ -12,7 +12,7 @@ public class EldritchHorrorCardProvider : ICardProvider
         _cardRepository = cardRepository;
     }
 
-    public async Task<IEnumerable<CardEntityBase>> GetCardsAsync(string cardTypeId)
+    public async Task<IEnumerable<CardEntityBase>> LoadCardsAsync(string cardTypeId)
     {
         return await _cardRepository.LoadCardsByCardType(cardTypeId);
     }

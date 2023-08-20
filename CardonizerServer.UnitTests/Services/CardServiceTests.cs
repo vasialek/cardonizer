@@ -53,7 +53,7 @@ public class CardServiceTests
         _gameOptionsRepository.GetCardTypeByIdAsync(CardTypeId).Returns(new CardType { GameNameId = GameId });
         _cardProviderFactory.CreateProvider(GameId).Returns(_cardProvider);
         var cards = new[] { _card2, _card1 };
-        _cardProvider.GetCardsAsync(CardTypeId).Returns(cards);
+        _cardProvider.LoadCardsAsync(CardTypeId).Returns(cards);
         _cardRandomizerService.RandomizeOrder(cards).Returns(new[] { _card1, _card2 });
 
         var actual = await _service.GetNextCardAsync(GameSessionId, CardTypeId);

@@ -19,7 +19,7 @@ public class AndorCardProvider : ICardProvider
     //     return cards.First(c => usedCardIds.Contains(c.CardId) == false);
     // }
 
-    public async Task<IEnumerable<CardEntityBase>> GetCardsAsync(string cardTypeId)
+    public async Task<IEnumerable<CardEntityBase>> LoadCardsAsync(string cardTypeId)
     {
         return await _cardRepository.LoadCardsByCardType(cardTypeId);
     }
