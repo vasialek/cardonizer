@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.105.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CardonizerServer.Api\CardonizerServer.Api.csproj" />
+    </ItemGroup>
+
+</Project>

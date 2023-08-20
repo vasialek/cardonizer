@@ -4,5 +4,6 @@ public enum ErrorCodes
 {
     None,
     ObjectNotFound,
-    NoNextCard
+    NoNextCard,
+    IncorrectValue
 }

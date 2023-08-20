@@ -16,11 +16,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<ICardMapper, CardMapper>();
 builder.Services.AddSingleton<IMythCardMapper, MythCardMapper>();
 builder.Services.AddSingleton<IMythActionsParser, MythActionsParser>();
 builder.Services.AddSingleton<IUniqueIdService, UniqueIdService>();
 builder.Services.AddSingleton<IJsonService, JsonService>();
 builder.Services.AddSingleton<ICardService, CardService>();
+builder.Services.AddSingleton<ICardAdminService, CardAdminService>();
+builder.Services.AddSingleton<ICardValidationService, CardValidationService>();
+builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<ICardRandomizerService, CardRandomizerService>();
 builder.Services.AddSingleton<IRandomProvider, RandomProvider>();
 builder.Services.AddSingleton<ICardProviderFactory, CardProviderFactory>();
@@ -38,6 +42,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 // app.UseHttpsRedirection();
 // app.UseAuthorization();

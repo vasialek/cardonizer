@@ -1,8 +1,8 @@
-namespace CardonizerServer.Api.Entities;
+namespace CardonizerServer.Api.Models;
 
-public class CardEntityBase
+public class CardDto
 {
-    public string CardId { get; set; }
+    public string GameNameId { get; set; }
 
     public string CardTypeId { get; set; }
 

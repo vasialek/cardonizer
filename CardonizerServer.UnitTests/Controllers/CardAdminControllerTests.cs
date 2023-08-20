@@ -12,13 +12,31 @@ namespace CardonizerServer.UnitTests.Controllers;
 public class CardAdminControllerTests
 {
     private const string MythCardId = "MythCardId";
-    private readonly CardAdminController _controller;
+    
     private readonly IMythRepository _mythRepository = Substitute.For<IMythRepository>();
+    private readonly ICardAdminService _cardAdminService = Substitute.For<ICardAdminService>();
+    
+    private readonly CardAdminController _controller;
 
     public CardAdminControllerTests()
     {
-        _controller = new CardAdminController(_mythRepository);
+        _controller = new CardAdminController(_cardAdminService, _mythRepository);
     }
+
+    [Fact]
+    public async Task CanAddCardAsync()
+    {
+        var card = new CardDto();
+        var expected = new CardEntityBase();
+        _cardAdminService.AddCardAsync(card).Returns(expected);
+
+        var actualResponse = await _controller.AddCardAsync(card);
+
+        var actual = actualResponse as OkObjectResult;
+        actual.Should().NotBeNull();
+        ((CardEntityBase)actual.Value).Should().Be(expected);
+    }
+
 
     [Fact]
     public async Task CanAddMythCardAsync()

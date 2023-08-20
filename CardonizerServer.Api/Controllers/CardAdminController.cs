@@ -8,11 +8,20 @@ namespace CardonizerServer.Api.Controllers;
 [Route("api/[controller]")]
 public class CardAdminController : ControllerBase
 {
+    private readonly ICardAdminService _cardAdminService;
     private readonly IMythRepository _mythRepository;
 
-    public CardAdminController(IMythRepository mythRepository)
+    public CardAdminController(ICardAdminService cardAdminService, IMythRepository mythRepository)
     {
+        _cardAdminService = cardAdminService;
         _mythRepository = mythRepository;
+    }
+
+    [HttpPost("AddCard")]
+    public async Task<IActionResult> AddCardAsync(CardDto card)
+    {
+        var cardEntityBase = await _cardAdminService.AddCardAsync(card);
+        return Ok(cardEntityBase);
     }
 
     [HttpPost("AddMythCard")]
