@@ -111,14 +111,20 @@ public class GameOptionsRepository : IGameOptionsRepository
             new ()
             {
                 GameNameId = GameNameRepository.RuneboundId,
-                CardTypeId = "0194c57298e94819948951a48badd0f3",
+                CardTypeId = FightCard.CardType,
                 Name = "Fight card (orange)"
             },
             new ()
             {
                 GameNameId = GameNameRepository.RuneboundId,
-                CardTypeId = "b31d0712777345cbb779f4e6fece492e",
+                CardTypeId = ActionCard.CardType,
                 Name = "Action card (purple)"
+            },
+            new ()
+            {
+                GameNameId = GameNameRepository.RuneboundId,
+                CardTypeId = MainEnemyCard.CardType,
+                Name = "Main enemy"
             }
         };
 

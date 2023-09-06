@@ -22,11 +22,11 @@ public class CardRandomizerServiceTests
     {
         var cards = new CardEntityBase[]
         {
-            new() { CardId = "Card01" }, new() { CardId = "Card02" }, new() { CardId = "Card03" }, new() { CardId = "Card04" }
+            new() { CardId = "1" }, new() { CardId = "2" }, new() { CardId = "3" }, new() { CardId = "4" }
         };
         var expected = new CardEntityBase[]
         {
-            new() { CardId = "Card04" }, new() { CardId = "Card03" }, new() { CardId = "Card02" }, new() { CardId = "Card01" }
+            new() { CardId = "4" }, new() { CardId = "3" }, new() { CardId = "2" }, new() { CardId = "1" }
         };
         _randomProvider.Next(10000).Returns(40, 30, 20, 10);
         

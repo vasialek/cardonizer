@@ -1,3 +1,4 @@
+using System.Collections;
 using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Interfaces;
 using CardonizerServer.Api.Models;
@@ -37,7 +38,7 @@ public class CardRepository : ICardRepository
             .ToList();
     }
 
-    private async Task LoadCards()
+    private void LoadCards()
     {
         _cardsList = new List<CardEntityBase>
         {
@@ -45,42 +46,42 @@ public class CardRepository : ICardRepository
             new GoldenCard { CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden1", Description = "About..." },
             new GoldenCard { CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden2", Description = "About..." },
             new GoldenCard { CardId = _uniqueIdService.GetUniqueId(), Title = "AndorGolden3", Description = "About..." },
-            new MythCard
-            {
-                MythActions = new[] { MythActions.AdvanceOmen, MythActions.MonsterSurge, MythActions.SpawnClues },
-                CardId = _uniqueIdService.GetUniqueId(), Title = "Отравленные припасы",
-                Description = "Ваша еду отравлена",
-                Effect = "Каждый сыщик теряет 3 здоровья если он не возьмет состояние Отравление"
-            },
-            new QuestCard
-            {
-                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте долину...", Title = "Погребенное зло", Description = "",
-                PossibleRewards = new []
-                {
-                    new QuestCardReward("Разграбьте и получите 1 золото за каждый символ холма", RuneboundDices.Hill),
-                    new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
-                } 
-            },
-            new QuestCard
-            {
-                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Пройдите проверку силы в Низинах горечи", Title = "Охота на зверя", 
-                Description = "В Низинах горечи видели редчайшего зверя невероятно ценещегося среди охотников.",
-                PossibleRewards = new []
-                {
-                    new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
-                } 
-            },
-            new QuestCard
-            {
-                CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте", Title = "Просьба графа", 
-                Description = "Граф замка Сандергард попросил...",
-                PossibleRewards = new []
-                {
-                    new QuestCardReward("Займитесь мелкими ппоручиниям. Получите 1 золотой", RuneboundDices.Lane),
-                    new QuestCardReward("Выполните задание графа. Возьмите одну карту квеста.", RuneboundDices.Lane, RuneboundDices.Lane),
-                    new QuestCardReward("Отбейте атаку... Получите 2 раны и 3 золотых.", RuneboundDices.Everything),
-                } 
-            },
+            // new MythCard
+            // {
+            //     MythActions = new[] { MythActions.AdvanceOmen, MythActions.MonsterSurge, MythActions.SpawnClues },
+            //     CardId = _uniqueIdService.GetUniqueId(), Title = "Отравленные припасы",
+            //     Description = "Ваша еду отравлена",
+            //     Effect = "Каждый сыщик теряет 3 здоровья если он не возьмет состояние Отравление"
+            // },
+            // new QuestCard
+            // {
+            //     CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте долину...", Title = "Погребенное зло", Description = "",
+            //     PossibleRewards = new []
+            //     {
+            //         new QuestCardReward("Разграбьте и получите 1 золото за каждый символ холма", RuneboundDices.Hill),
+            //         new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
+            //     } 
+            // },
+            // new QuestCard
+            // {
+            //     CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Пройдите проверку силы в Низинах горечи", Title = "Охота на зверя", 
+            //     Description = "В Низинах горечи видели редчайшего зверя невероятно ценещегося среди охотников.",
+            //     PossibleRewards = new []
+            //     {
+            //         new QuestCardReward("Осверните...", RuneboundDices.Hill, RuneboundDices.Hill),
+            //     } 
+            // },
+            // new QuestCard
+            // {
+            //     CardId = _uniqueIdService.GetUniqueId(), QuestTask = "Исследуйте", Title = "Просьба графа", 
+            //     Description = "Граф замка Сандергард попросил...",
+            //     PossibleRewards = new []
+            //     {
+            //         new QuestCardReward("Займитесь мелкими ппоручиниям. Получите 1 золотой", RuneboundDices.Lane),
+            //         new QuestCardReward("Выполните задание графа. Возьмите одну карту квеста.", RuneboundDices.Lane, RuneboundDices.Lane),
+            //         new QuestCardReward("Отбейте атаку... Получите 2 раны и 3 золотых.", RuneboundDices.Everything),
+            //     } 
+            // },
             // new MythCard
             // {
             //     MythActions = new[] { MythActions.AdvanceOmen, MythActions.ResolveReckoning, MythActions.SpawnGate },
@@ -105,16 +106,23 @@ public class CardRepository : ICardRepository
             // }
         };
 
-        var mythCards = await LoadMythCardsFromFile();
+        var mythCards = LoadMythCardsFromFile<List<MythCard>>("mythos.json", MythCard.CardType);
+        var runuboundQuestCards = LoadMythCardsFromFile<List<QuestCard>>("runeboundquests.json", QuestCard.CardType);
         _cardsList.AddRange(mythCards);
+        _cardsList.AddRange(runuboundQuestCards);
     }
 
-    private static async Task<IEnumerable<MythCard>> LoadMythCardsFromFile()
+    private static T LoadMythCardsFromFile<T>(string cardFileName, string cardTypeId) where T : IEnumerable<CardEntityBase>
     {
-        var json = await File.ReadAllTextAsync("/home/aleksey/_projects/cardonizer/_data/mythos.json");
+        var json = File.ReadAllText($"/home/aleksey/_projects/cardonizer/_data/{cardFileName}");
 
-        var mythCards = JsonConvert.DeserializeObject<List<MythCard>>(json);
-        mythCards.ForEach(c => c.CardTypeId = MythCard.CardType);
-        return mythCards;
+        var cards = JsonConvert.DeserializeObject<T>(json);
+        foreach (var card in cards)
+        {
+            card.CardTypeId = cardTypeId;
+        }
+        // cards.ForEach(c => c.CardTypeId = cardTypeId);
+        Console.WriteLine("Loaded {0} cards", cards.Count());
+        return cards;
     }
 }
