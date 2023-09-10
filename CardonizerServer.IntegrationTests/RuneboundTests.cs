@@ -20,11 +20,14 @@ public class RuneboundTests
     private readonly ITestOutputHelper _outputHelper;
     private readonly IRandomProvider _randomProvider = Substitute.For<IRandomProvider>();
     private readonly ICardRepository? _cardRepository = Substitute.For<ICardRepository>();
-    private readonly GameOptionsRepository _gameOptionsRepository = new();
+    private readonly IGameNameRepository _gameNameRepository = new GameNameRepository();
+    
+    private readonly GameOptionsRepository _gameOptionsRepository;
 
     public RuneboundTests(ITestOutputHelper outputHelper)
     {
         _outputHelper = outputHelper;
+        _gameOptionsRepository = new GameOptionsRepository(_gameNameRepository);
     }
 
     [Fact]

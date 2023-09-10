@@ -29,6 +29,7 @@ builder.Services.AddSingleton<ICardRandomizerService, CardRandomizerService>();
 builder.Services.AddSingleton<IRandomProvider, RandomProvider>();
 builder.Services.AddSingleton<ICardProviderFactory, CardProviderFactory>();
 builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
+builder.Services.AddSingleton<IGameNameRepository, GameNameRepository>();
 builder.Services.AddSingleton<ICardRepository, CardRepository>();
 builder.Services.AddSingleton<IGameOptionsRepository, GameOptionsRepository>();
 builder.Services.AddSingleton<ICardValidationServiceFactory, CardValidationServiceFactory>();

@@ -106,21 +106,28 @@ public class CardRepository : ICardRepository
             // }
         };
 
-        var mythCards = LoadMythCardsFromFile<List<MythCard>>("mythos.json", MythCard.CardType);
-        var runuboundQuestCards = LoadMythCardsFromFile<List<QuestCard>>("runeboundquests.json", QuestCard.CardType);
+        var mythCards = LoadCardsFromFile<List<MythCard>>("mythos.json", MythCard.CardType);
+        var runuboundQuestCards = LoadCardsFromFile<List<CardEntityBase>>("runeboundquests.json");
         _cardsList.AddRange(mythCards);
         _cardsList.AddRange(runuboundQuestCards);
     }
 
-    private static T LoadMythCardsFromFile<T>(string cardFileName, string cardTypeId) where T : IEnumerable<CardEntityBase>
+    private static T LoadCardsFromFile<T>(string cardFileName, string cardTypeId) where T : IEnumerable<CardEntityBase>
     {
-        var json = File.ReadAllText($"/home/aleksey/_projects/cardonizer/_data/{cardFileName}");
-
-        var cards = JsonConvert.DeserializeObject<T>(json);
+        var cards = LoadCardsFromFile<T>(cardFileName);
         foreach (var card in cards)
         {
             card.CardTypeId = cardTypeId;
         }
+        
+        return cards;
+    }
+    
+    private static T LoadCardsFromFile<T>(string cardFileName) where T : IEnumerable<CardEntityBase>
+    {
+        var json = File.ReadAllText($"/home/aleksey/_projects/cardonizer/_data/{cardFileName}");
+
+        var cards = JsonConvert.DeserializeObject<T>(json);
         // cards.ForEach(c => c.CardTypeId = cardTypeId);
         Console.WriteLine("Loaded {0} cards", cards.Count());
         return cards;

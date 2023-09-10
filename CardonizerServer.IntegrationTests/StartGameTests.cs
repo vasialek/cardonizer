@@ -17,6 +17,7 @@ public class StartGameTests
 {
     private readonly ITestOutputHelper _outputHelper;
     private readonly IRandomProvider _randomProvider = Substitute.For<IRandomProvider>();
+    private readonly IGameNameRepository _gameNameRepository = Substitute.For<IGameNameRepository>();
 
     public StartGameTests(ITestOutputHelper outputHelper)
     {
@@ -27,9 +28,8 @@ public class StartGameTests
     public async Task CanStartAndorId()
     {
         var uniqueIdService = new UniqueIdService();
-        // var cardRepository = new CardRepository(uniqueIdService);
         var cardRepository = Substitute.For<ICardRepository>();
-        var gameOptionsRepository = new GameOptionsRepository();
+        var gameOptionsRepository = new GameOptionsRepository(_gameNameRepository);
         var cardProviderFactory = new CardProviderFactory(cardRepository);
         var cardRandomizerService = new CardRandomizerService(_randomProvider);
         var gameService = new GameService(gameOptionsRepository);
