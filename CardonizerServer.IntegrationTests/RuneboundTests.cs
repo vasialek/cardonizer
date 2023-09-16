@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using CardonizerServer.Api.Entities;
 using CardonizerServer.Api.Factories;
@@ -213,16 +214,49 @@ public class RuneboundTests
                 new FightCard
                 {
                     CardId = "1", Title = "Морской змей", Fighter = Fighters.Trikster, Health = 6,
+                    Reward = "",
                     SpecialAttacks = new[]
                     {
-                        new SpecialAttack(1, "Уберите 1 щит"),
-                        new SpecialAttack(2, "Вылечить 1 здоровья"),
-                        new SpecialAttack(3, "Нанесите 2 урона (неблокируемые)")
+                        new SpecialAttack(1, "Уберите 1 щит."),
+                        new SpecialAttack(2, "Вылечить 1 здоровья."),
+                        new SpecialAttack(3, "Нанесите 2 урона (неблокируемые).")
                     }
                 },
-                new FightCard { CardId = "2" }
+                new FightCard
+                {
+                    CardId = "2", Title = "Тенеклык", Fighter = Fighters.Trikster, Health = 8,
+                    Reward = "Получите 10 золотых",
+                    Ability = "Этот враг получает удвоенный урон от каждой магической атаки.",
+                    SpecialAttacks = new[]
+                    {
+                        new SpecialAttack(1, "Уход в тень: уберите 2 топора противника."),
+                        new SpecialAttack(2, "Контратака: уберите 1 топор противника и нанесите 1 урон.")
+                    }
+                },
+                new FightCard
+                {
+                    CardId = "3", Title = "Куархадрон", Fighter = Fighters.Mystic, Health = 8,
+                    Reward = "Получите Легендарный Коравим", Ability = "Этот враг получает +1 к инициативе.",
+                    SpecialAttacks = new[]
+                    {
+                        new SpecialAttack(1, "Указ правителя: уберите 1 топор противника."),
+                        new SpecialAttack(2,
+                            "Проклятье: за каждый потраченный жетон в этом раунде нанесите по 1 урону (нельзя заблокировать).")
+                    }
+                },
+                new FightCard
+                {
+                    CardId = "4", Title = "Таинственный тролль", Fighter = Fighters.Savage, Health = 6,
+                    Reward = "Получите Эльфийские сапоги", Ability = "",
+                    SpecialAttacks = new[]
+                    {
+                        new SpecialAttack(1, "Уклонение: уберите 1 топор противника."),
+                        new SpecialAttack(2,
+                            "Контратака вырванным деревом: уберите 1 топор противника и нанесите 1 урон.")
+                    },
+                }
             });
-        _randomProvider.Next(Arg.Any<int>()).Returns(10, 20, 30);
+        _randomProvider.Next(Arg.Any<int>()).Returns(10, 20, 30, 25);
 
         var gameSession = await gameSessionManager.CreateAsync(GameNameRepository.RuneboundId);
         var actual = await cardService.GetNextCardAsync(gameSession.GameSessionId, FightCard.CardType);
@@ -232,6 +266,14 @@ public class RuneboundTests
         actual = await cardService.GetNextCardAsync(gameSession.GameSessionId, FightCard.CardType);
         _outputHelper.WriteLine(JsonConvert.SerializeObject(actual));
         actual.CardId.Should().Be("2");
+        
+        actual = await cardService.GetNextCardAsync(gameSession.GameSessionId, FightCard.CardType);
+        _outputHelper.WriteLine(JsonConvert.SerializeObject(actual));
+        actual.CardId.Should().Be("4");
+
+        actual = await cardService.GetNextCardAsync(gameSession.GameSessionId, FightCard.CardType);
+        _outputHelper.WriteLine(JsonConvert.SerializeObject(actual));
+        actual.CardId.Should().Be("3");
     }
 
     [Fact]

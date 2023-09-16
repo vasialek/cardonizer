@@ -1,0 +1,90 @@
+[
+  {
+    "Fighter": 2,
+    "Health": 6,
+    "Ability": null,
+    "SpecialAttacks": [
+      {
+        "Lightnings": 1,
+        "Effect": "Уберите 1 щит."
+      },
+      {
+        "Lightnings": 2,
+        "Effect": "Вылечить 1 здоровья."
+      },
+      {
+        "Lightnings": 3,
+        "Effect": "Нанесите 2 урона (неблокируемые)."
+      }
+    ],
+    "Reward": "",
+    "CardId": "1",
+    "CardTypeId": "0194c57298e94819948951a48badd0f3",
+    "Title": "Морской змей",
+    "Description": null,
+    "Payload": null
+  },
+  {
+    "Fighter": 2,
+    "Health": 8,
+    "Ability": "Этот враг получает удвоенный урон от каждой магической атаки.",
+    "SpecialAttacks": [
+      {
+        "Lightnings": 1,
+        "Effect": "Уход в тень: уберите 2 топора противника."
+      },
+      {
+        "Lightnings": 2,
+        "Effect": "Контратака: уберите 1 топор противника и нанесите 1 урон."
+      }
+    ],
+    "Reward": "Получите 10 золотых",
+    "CardId": "2",
+    "CardTypeId": "0194c57298e94819948951a48badd0f3",
+    "Title": "Тенеклык",
+    "Description": null,
+    "Payload": null
+  },
+  {
+    "Fighter": 3,
+    "Health": 8,
+    "Ability": "Этот враг получает +1 к инициативе.",
+    "SpecialAttacks": [
+      {
+        "Lightnings": 1,
+        "Effect": "Указ правителя: уберите 1 топор противника."
+      },
+      {
+        "Lightnings": 2,
+        "Effect": "Проклятье: за каждый потраченный жетон в этом раунде нанесите по 1 урону (нельзя заблокировать)."
+      }
+    ],
+    "Reward": "Получите Легендарный Коравим",
+    "CardId": "3",
+    "CardTypeId": "0194c57298e94819948951a48badd0f3",
+    "Title": "Куархадрон",
+    "Description": null,
+    "Payload": null
+  },
+  {
+    "Fighter": 4,
+    "Health": 6,
+    "Ability": "",
+    "SpecialAttacks": [
+      {
+        "Lightnings": 1,
+        "Effect": "Уклонение: уберите 1 топор противника."
+      },
+      {
+        "Lightnings": 2,
+        "Effect": "Контратака вырванным деревом: уберите 1 топор противника и нанесите 1 урон."
+      }
+    ],
+    "Reward": "Получите Эльфийские сапоги",
+    "CardId": "4",
+    "CardTypeId": "0194c57298e94819948951a48badd0f3",
+    "Title": "Таинственный тролль",
+    "Description": null,
+    "Payload": null
+  }
+]
