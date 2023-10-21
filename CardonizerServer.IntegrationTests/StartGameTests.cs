@@ -30,7 +30,7 @@ public class StartGameTests
         var uniqueIdService = new UniqueIdService();
         var cardRepository = Substitute.For<ICardRepository>();
         var gameOptionsRepository = new GameOptionsRepository(_gameNameRepository);
-        var cardProviderFactory = new CardProviderFactory(cardRepository);
+        var cardProviderFactory = new CardProviderFactory(cardRepository, gameOptionsRepository);
         var cardRandomizerService = new CardRandomizerService(_randomProvider);
         var gameService = new GameService(gameOptionsRepository);
         var gameSessionManager = new GameSessionManager(gameService, uniqueIdService);

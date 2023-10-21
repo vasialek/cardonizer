@@ -109,9 +109,13 @@ public class CardRepository : ICardRepository
         var mythCards = LoadCardsFromFile<List<MythCard>>("mythos.json", MythCard.CardType);
         var runboundQuestCards = LoadCardsFromFile<List<QuestCard>>("runebound_questcards.json");
         var runboundActionCards = LoadCardsFromFile<List<ActionCard>>("runebound_actioncards.json");
+        var fpgQuestCards = LoadCardsFromFile<List<QuestCard>>("fpg_quests.json");
         _cardsList.AddRange(mythCards);
         _cardsList.AddRange(runboundQuestCards);
         _cardsList.AddRange(runboundActionCards);
+        _cardsList.AddRange(fpgQuestCards);
+        
+        
     }
 
     private static T LoadCardsFromFile<T>(string cardFileName, string cardTypeId) where T : IEnumerable<CardEntityBase>

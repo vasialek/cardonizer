@@ -22,7 +22,6 @@ public class RuneboundTests
     private readonly IRandomProvider _randomProvider = Substitute.For<IRandomProvider>();
     private readonly ICardRepository? _cardRepository = Substitute.For<ICardRepository>();
     private readonly IGameNameRepository _gameNameRepository = new GameNameRepository();
-    
     private readonly GameOptionsRepository _gameOptionsRepository;
 
     public RuneboundTests(ITestOutputHelper outputHelper)
@@ -305,7 +304,7 @@ public class RuneboundTests
 
     private CardService ArrangeCardService(GameSessionManager gameSessionManager)
     {
-        var cardProviderFactory = new CardProviderFactory(_cardRepository);
+        var cardProviderFactory = new CardProviderFactory(_cardRepository, _gameOptionsRepository);
         var cardRandomizerService = new CardRandomizerService(_randomProvider);
         var cardService = new CardService(cardProviderFactory, gameSessionManager, cardRandomizerService, _gameOptionsRepository);
         return cardService;

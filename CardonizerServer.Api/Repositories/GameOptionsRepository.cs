@@ -123,6 +123,12 @@ public class GameOptionsRepository : IGameOptionsRepository
                 GameNameId = GameNameRepository.RuneboundId,
                 CardTypeId = MainEnemyCard.CardType,
                 Name = "Main enemy"
+            },
+            new ()
+            {
+                GameNameId = GameNameRepository.FpgId,
+                CardTypeId = "1bfb47539721432f91d8f9a37603eadd",
+                Name = "FPG quest card"
             }
         };
 
