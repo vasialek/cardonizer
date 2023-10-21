@@ -1,69 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardonizer Web</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="lib/knockout-3.5.1.js.js"></script>
-    <script src="js/eldritchhorrorapp.js" defer></script>
-    <script src="js/app.js" defer></script>
-</head>
-
-<body>
-    <div>
-        <button data_bind="click: loadApp1">Load App 1</button>
-        <button data_bind="click: loadApp2">Load App 2</button>
-    </div>
-    <div id="Application"></div>
-
-    <eldritch-horror-app></eldritch-horror-app>
-
-    <script type="text/html" id="EldritchHorrorAppTemplate">
-        <h5>Eldritch Horror</h5>
-        <div class="row">
-            <div class="col-3">
-                <div class="mb-3 mt-3">
-                <input data-bind="value: title" class="form-control form-control-sm" type="text" placeholder="Title" /></div>
-                <div class="mb-3 mt-3">
-                <input data-bind="value: description" class="form-control form-control-sm" type="text" placeholder="Description" /></div>
-                <div class="mb-3 mt-3">
-                <input data-bind="value: effect" class="form-control form-control-sm" type="text" placeholder="Effect" /></div>
-                <div class="mb-3 mt-3">
-                <input data-bind="value: reckoning" class="form-control form-control-sm" type="text" placeholder="Reckoning" /></div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Advance omen</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Resolve reckoning</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Spawn gate</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Monster surge</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Spawn clues</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Rumor token</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">Eldritch token</label>
-                </div>
-                <button data-bind="click: onSaveClicked" class="btn btn-success">Save</button>
-            </div>
-        </div>
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="mocha.js"></script>
+    <script>
+      mocha.setup('bdd');
     </script>
-</body>
-
+    <script src="tests.spec.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
 </html>

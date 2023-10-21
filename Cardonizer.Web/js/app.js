@@ -15,9 +15,15 @@ class AppViewModel
     }
 }
 
-ko.components.register("eldritch-horror-app", {
-    viewModel: { instance: new EldritchHorrorApp() },
-    template: { element: "EldritchHorrorAppTemplate" }
-});
+// ko.components.register("eldritch-horror-app", {
+//     viewModel: { instance: new EldritchHorrorApp() },
+//     template: { element: "EldritchHorrorAppTemplate" }
+// });
 
-ko.applyBindings(new AppViewModel);
+// ko.components.register("runebound-app", {
+//     viewModel: { instance: new RuneboundApp() },
+//     template: { element: "RuneboundAppTemplate" }
+// });
+
+ko.applyBindings(new RuneboundApp(), document.getElementById("RuneboundAppTemplate"));
+// ko.applyBindings(new AppViewModel());
