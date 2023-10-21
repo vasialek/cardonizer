@@ -14,7 +14,7 @@ public class GameService : IGameService
 
     public async Task<GameDto> GetGameAsync(string gameId)
     {
-        var game = _gameRepository.GetGameByGameId(gameId);
+        var game = await _gameRepository.GetGameByGameId(gameId);
         var cardTypes = _gameRepository.GetGameCardTypes()
             .Where(t => t.GameNameId == gameId)
             .ToArray();

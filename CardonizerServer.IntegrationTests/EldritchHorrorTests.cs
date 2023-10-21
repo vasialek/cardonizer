@@ -32,7 +32,8 @@ public class EldritchHorrorTests
     {
         var uniqueIdService = new UniqueIdService();
         var cardRepository = Substitute.For<ICardRepository>();
-        var gameOptionsRepository = new GameOptionsRepository();
+        var gameNameRepository = new GameNameRepository();
+        var gameOptionsRepository = new GameOptionsRepository(gameNameRepository);
         var cardProviderFactory = new CardProviderFactory(cardRepository);
         var cardRandomizerService = new CardRandomizerService(_randomProvider);
         var gameService = new GameService(gameOptionsRepository);

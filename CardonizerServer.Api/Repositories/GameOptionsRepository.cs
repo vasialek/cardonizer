@@ -10,20 +10,18 @@ namespace CardonizerServer.Api.Repositories;
 
 public class GameOptionsRepository : IGameOptionsRepository
 {
-    public GameNameEntity GetGameByGameId(string gameId)
+    private readonly IGameNameRepository _gameNameRepository;
+
+    public GameOptionsRepository(IGameNameRepository gameNameRepository)
     {
-        return LoadAvailableGames().FirstOrDefault(g => g.GameNameId == gameId) ??
-               throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Failed to get game by ID: {gameId}");
+        _gameNameRepository = gameNameRepository;
     }
 
-    public IEnumerable<GameNameEntity> LoadAvailableGames()
+    public async Task<GameNameEntity> GetGameByGameId(string gameId)
     {
-        return new[]
-        {
-            new GameNameEntity("Eldritch Horror", GameNameRepository.EldritchHorrorId),
-            new GameNameEntity("Runebound", GameNameRepository.RuneboundId),
-            new GameNameEntity("Andor", GameNameRepository.AndorId),
-        };
+        var games = await _gameNameRepository.LoadAvailableGames();
+        return games.FirstOrDefault(g => g.GameNameId == gameId) ??
+               throw new InternalFlowException(ErrorCodes.ObjectNotFound, $"Failed to get game by ID: {gameId}");
     }
 
     public IEnumerable<CardType> GetGameCardTypes()

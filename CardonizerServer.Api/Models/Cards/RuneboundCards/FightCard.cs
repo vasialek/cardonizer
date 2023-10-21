@@ -10,7 +10,11 @@ public class FightCard : CardEntityBase
 
     public int Health { get; set; }
 
+    public string Ability { get; set; }
+
     public SpecialAttack[] SpecialAttacks { get; set; }
+
+    public string Reward { get; set; }
 
     public FightCard()
     {
